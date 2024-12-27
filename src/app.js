@@ -19,6 +19,7 @@ app.get("/", (req, res) => {
 const BASE_URL_V1 = require("./config/base-url.js");
 
 app.use(BASE_URL_V1 + "/auth", require("./routes/auth.routes.js"));
+app.use(BASE_URL_V1 + "/claims", require("./routes/claim.routes.js"));
 // app.use(BASE_URL_V1 + "/role", require("./routes/role.route"));
 
 module.exports = app;
