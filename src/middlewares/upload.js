@@ -1,4 +1,4 @@
-const multer = require("multer");
+import multer from "multer";
 
 // Use memory storage instead of disk storage
 const storage = multer.memoryStorage();
@@ -17,4 +17,4 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
 });
 
-module.exports = upload;
+export default upload;

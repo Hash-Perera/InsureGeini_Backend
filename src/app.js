@@ -1,7 +1,9 @@
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const { AuthGuard } = require("./middlewares/auth-guard.js");
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import BASE_URL_V1 from "./config/base-url.js";
+import authRoutes from "./routes/auth.routes.js";
+import claimRoutes from "./routes/claim.routes.js";
 
 //! Initialize Express app
 const app = express();
@@ -16,10 +18,8 @@ app.get("/", (req, res) => {
 
 //! Routes
 // app.use(AuthGuard); // Auth Middleware
-const BASE_URL_V1 = require("./config/base-url.js");
+app.use(`${BASE_URL_V1}/auth`, authRoutes);
+app.use(`${BASE_URL_V1}/claims`, claimRoutes);
+// app.use(`${BASE_URL_V1}/role`, roleRoutes);
 
-app.use(BASE_URL_V1 + "/auth", require("./routes/auth.routes.js"));
-app.use(BASE_URL_V1 + "/claims", require("./routes/claim.routes.js"));
-// app.use(BASE_URL_V1 + "/role", require("./routes/role.route"));
-
-module.exports = app;
+export default app;

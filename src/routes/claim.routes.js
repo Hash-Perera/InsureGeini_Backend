@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express";
+import claimService from "../services/claim.service.js";
+import upload from "../middlewares/upload.js";
+
 const router = express.Router();
-const claimService = require("../services/claim.service.js");
-const upload = require("../middlewares/upload.js");
 
 router.post(
   "/add",
@@ -15,6 +16,13 @@ router.post(
   ]),
   claimService.addClaim
 );
+
 router.get("/get", claimService.getClaims);
 
-module.exports = router;
+router.post(
+  "/upload",
+  upload.fields([{ name: "file1", maxCount: 1 }]),
+  claimService.upload
+);
+
+export default router;

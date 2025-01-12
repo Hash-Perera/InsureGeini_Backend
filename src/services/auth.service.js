@@ -1,10 +1,10 @@
-const jwt = require("jsonwebtoken");
-const argon2 = require("argon2");
-const Role = require("../models/role.model");
-const User = require("../models/user.model");
+import jwt from "jsonwebtoken";
+import argon2 from "argon2";
+import Role from "../models/role.model.js";
+import User from "../models/user.model.js";
 
 //!---- Register User Service
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   try {
     const userData = req.body;
     const encryptedPassword = await argon2.hash(userData.password);
@@ -12,16 +12,18 @@ exports.register = async (req, res) => {
     userData.insuranceId = userData.insuranceId.toLowerCase();
 
     const newUser = await User.create(userData);
-    res.status(200);
-    res.json({ success: true, data: newUser });
+    res.status(200).json({ success: true, data: newUser });
   } catch (error) {
-    console.log(error.message);
-    throw new Error("Failed to create user. Please try again.");
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create user. Please try again.",
+    });
   }
 };
 
 //!---- Login User Service
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const dto = req.body;
     const user = await User.findOne({
@@ -47,7 +49,7 @@ exports.login = async (req, res) => {
         .json({ message: "Role not found. Please try again." });
     }
 
-    //? generate jwt token
+    //? Generate JWT token
     const payload = jwt.sign(
       { id: user._id, role: role.name },
       process.env.JWT_SECRET || "InsureGeiniJWTKey123456",
@@ -56,22 +58,34 @@ exports.login = async (req, res) => {
       }
     );
 
-    //? send token and permissions
+    //? Send token and permissions
     res.status(200).json({ token: payload, role: role.name });
   } catch (error) {
-    console.log(error.message);
-    throw error;
+    console.error(error.message);
+    res
+      .status(500)
+      .json({ success: false, message: "Login failed. Please try again." });
   }
 };
 
-exports.createRole = async (req, res) => {
+//!---- Create Role Service
+const createRole = async (req, res) => {
   try {
     const role = req.body;
     const newRole = await Role.create(role);
-    res.status(200);
-    res.json({ success: true, data: newRole });
+    res.status(200).json({ success: true, data: newRole });
   } catch (error) {
-    console.log(error.message);
-    throw new Error("Failed to create role. Please try again.");
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create role. Please try again.",
+    });
   }
+};
+
+// Add this at the bottom of the file
+export default {
+  register,
+  login,
+  createRole,
 };
