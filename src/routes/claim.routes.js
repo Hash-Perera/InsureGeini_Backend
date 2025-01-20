@@ -13,6 +13,7 @@ router.post(
     { name: "nicBack", maxCount: 1 },
     { name: "drivingLicenseFront", maxCount: 1 },
     { name: "drivingLicenseBack", maxCount: 1 },
+    { name: "driverFace", maxCount: 1 },
   ]),
   claimService.addClaim
 );

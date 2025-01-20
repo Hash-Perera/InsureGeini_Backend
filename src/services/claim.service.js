@@ -21,9 +21,12 @@ const addClaim = async (req, res) => {
       }
     }
 
-    const response = await awsService.uploadSingleFile(fileData.insuranceFront);
-    console.log("Upload Response");
-    console.log(response);
+    console.log("Claim Data");
+    console.log(fileData);
+
+    // const response = await awsService.uploadSingleFile(fileData.insuranceFront);
+    // console.log("Upload Response");
+    // console.log(response);
 
     // Respond with success
     res.status(200).json({ success: true, data: { claimData, fileData } });
