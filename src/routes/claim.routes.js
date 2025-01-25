@@ -14,6 +14,7 @@ router.post(
     { name: "drivingLicenseFront", maxCount: 1 },
     { name: "drivingLicenseBack", maxCount: 1 },
     { name: "driverFace", maxCount: 1 },
+    { name: "damageImages", maxCount: 10 },
   ]),
   claimService.addClaim
 );

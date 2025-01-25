@@ -1,32 +1,55 @@
 import awsService from "../services/aws.service.js";
+import Claim from "../models/claim.model.js";
 
 // Add Claim Service
 const addClaim = async (req, res) => {
   try {
+    console.log("Claim request processing...");
     const claimData = req.body.dto ? JSON.parse(req.body.dto) : {};
-    const fileData = {};
+    const fileData = req.files;
 
-    // Process files uploaded in the request
-    if (req.files) {
-      for (const key of Object.keys(req.files)) {
-        if (req.files[key].length > 0) {
-          const file = req.files[key][0];
-          fileData[key] = {
-            originalname: file.originalname,
-            mimetype: file.mimetype,
-            size: file.size,
-            buffer: file.buffer,
-          };
-        }
-      }
-    }
+    ///
+    const userMongo = "6748472eae0fb7cdbf7190fa";
+    const previousClaimCount = await Claim.countDocuments({ user: userMongo });
+    const claimId = `CLM-${previousClaimCount + 1}`;
+    const folderPath = `${userMongo}/${claimId}`;
 
-    console.log("Claim Data");
-    console.log(fileData);
+    console.log(fileData.insuranceFront[0]);
+    claimData.insuranceFront = await awsService.uploadSingleFile(
+      fileData.insuranceFront[0]
+    );
+    console.log(claimData.insuranceFront);
+    // claimData.insuranceBack = await awsService.uploadSingleFile(
+    //   fileData.insuranceBack[0],
+    //   folderPath
+    // );
+    // claimData.nicFront = await awsService.uploadSingleFile(
+    //   fileData.nicFront[0],
+    //   folderPath
+    // );
+    // claimData.nicBack = await awsService.uploadSingleFile(
+    //   fileData.nicBack[0],
+    //   folderPath
+    // );
+    // claimData.drivingLicenseFront = await awsService.uploadSingleFile(
+    //   fileData.drivingLicenseFront[0],
+    //   folderPath
+    // );
+    // claimData.drivingLicenseBack = await awsService.uploadSingleFile(
+    //   fileData.drivingLicenseBack[0],
+    //   folderPath
+    // );
+    // claimData.driverFace = await awsService.uploadSingleFile(
+    //   fileData.driverFace[0],
+    //   folderPath
+    // );
 
-    // const response = await awsService.uploadSingleFile(fileData.insuranceFront);
-    // console.log("Upload Response");
-    // console.log(response);
+    // claimData.damageImages = await awsService.uploadMultipleFiles(
+    //   fileData.damageImages,
+    //   folderPath
+    // );
+
+    console.log(claimData);
 
     // Respond with success
     res.status(200).json({ success: true, data: { claimData, fileData } });
