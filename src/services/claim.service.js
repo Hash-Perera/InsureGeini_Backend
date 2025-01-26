@@ -14,11 +14,9 @@ const addClaim = async (req, res) => {
     const claimId = `CLM-${previousClaimCount + 1}`;
     const folderPath = `${userMongo}/${claimId}`;
 
-    console.log(fileData.insuranceFront[0]);
     claimData.insuranceFront = await awsService.uploadSingleFile(
       fileData.insuranceFront[0]
     );
-    console.log(claimData.insuranceFront);
     // claimData.insuranceBack = await awsService.uploadSingleFile(
     //   fileData.insuranceBack[0],
     //   folderPath
@@ -80,12 +78,23 @@ const getClaims = async (req, res) => {
 const upload = async (req, res) => {
   const fileData = req.files.file1[0];
   const response = await awsService.uploadSingleFile(fileData);
-  console.log("Upload Response");
   console.log(response);
+  res.status(200).json({ success: true, data: response });
+};
+
+const addClaim2 = async (req, res) => {
+  // create a claim object record in db
+  const claim = new Claim({
+    ...req.body,
+  });
+
+  const saved = await claim.save();
+  res.status(200).json({ success: true, data: saved });
 };
 
 export default {
   addClaim,
   getClaims,
   upload,
+  addClaim2,
 };

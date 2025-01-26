@@ -14,17 +14,17 @@ const uploadSingleFile = async (file, folderPath) => {
       .resize({ height: 1920, width: 1080, fit: "contain" })
       .toBuffer();
 
+    console.log(file);
+
     const params = {
       Bucket: BUCKET_NAME,
-      Key: fileKey,
+      Key: `${Date.now()}-${file.originalname}`,
       Body: buffer,
       ContentType: file.mimetype,
     };
 
     // Upload the file
     const command = new PutObjectCommand(params);
-    console.log(BUCKET_NAME);
-    console.log(BUCKET_REGION);
     console.log("Uploading...");
     await s3.send(command);
 

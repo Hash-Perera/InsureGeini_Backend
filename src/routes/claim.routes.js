@@ -19,6 +19,8 @@ router.post(
   claimService.addClaim
 );
 
+router.post("/add2", claimService.addClaim2);
+
 router.get("/get", claimService.getClaims);
 
 router.post(
