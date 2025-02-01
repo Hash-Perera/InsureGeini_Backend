@@ -9,14 +9,16 @@ const addClaim = async (req, res) => {
     const fileData = req.files;
 
     ///
-    const userMongo = "6748472eae0fb7cdbf7190fa";
+    const userMongo = "6748472eae0fb7cdbf7190fb";
     const previousClaimCount = await Claim.countDocuments({ user: userMongo });
     const claimId = `CLM-${previousClaimCount + 1}`;
     const folderPath = `${userMongo}/${claimId}`;
 
     claimData.insuranceFront = await awsService.uploadSingleFile(
-      fileData.insuranceFront[0]
+      fileData.insuranceFront[0],
+      folderPath
     );
+
     claimData.insuranceBack = await awsService.uploadSingleFile(
       fileData.insuranceBack[0],
       folderPath

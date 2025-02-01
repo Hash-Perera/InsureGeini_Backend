@@ -14,11 +14,9 @@ const uploadSingleFile = async (file, folderPath) => {
       .resize({ height: 1920, width: 1080, fit: "contain" })
       .toBuffer();
 
-    console.log(file);
-
     const params = {
       Bucket: BUCKET_NAME,
-      Key: `${Date.now()}-${file.originalname}`,
+      Key: fileKey,
       Body: buffer,
       ContentType: file.mimetype,
     };
@@ -32,7 +30,6 @@ const uploadSingleFile = async (file, folderPath) => {
     const fileUrl = `https://${BUCKET_NAME}.s3.${BUCKET_REGION}.amazonaws.com/${fileKey}`;
 
     // Return the URL
-    console.log(fileUrl);
     return fileUrl;
   } catch (error) {
     console.error("Error uploading file to S3:", error);
