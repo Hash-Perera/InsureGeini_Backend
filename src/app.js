@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 //! Routes
-// app.use(AuthGuard); // Auth Middleware
+app.use(AuthGuard); // Auth Middleware
 app.use(`${BASE_URL_V1}/auth`, authRoutes);
 app.use(`${BASE_URL_V1}/claims`, claimRoutes);
 // app.use(`${BASE_URL_V1}/role`, roleRoutes);

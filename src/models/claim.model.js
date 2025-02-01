@@ -1,7 +1,7 @@
 import mongoose, { Types } from "mongoose";
 
 const claimSchema = new mongoose.Schema({
-  insuraceId: {
+  insuranceId: {
     type: String,
     required: true,
   },
@@ -17,7 +17,7 @@ const claimSchema = new mongoose.Schema({
   },
 
   damagedAreas: {
-    type: String,
+    type: [String],
     required: true,
   },
 

@@ -5,15 +5,17 @@ import Claim from "../models/claim.model.js";
 const addClaim = async (req, res) => {
   try {
     console.log("Claim request processing...");
+    // Get data from request
     const claimData = req.body.dto ? JSON.parse(req.body.dto) : {};
     const fileData = req.files;
+    const userId = req.user?.toString();
 
-    ///
-    const userMongo = "6748472eae0fb7cdbf7190fb";
-    const previousClaimCount = await Claim.countDocuments({ user: userMongo });
-    const claimId = `CLM-${previousClaimCount + 1}`;
-    const folderPath = `${userMongo}/${claimId}`;
+    // Create AWS Path
+    const previousClaimCount = await Claim.countDocuments({ userId: userId });
+    const claimId = `CLM_${previousClaimCount + 1}`;
+    const folderPath = `${userId}/${claimId}`;
 
+    // Upload files to AWS
     claimData.insuranceFront = await awsService.uploadSingleFile(
       fileData.insuranceFront[0],
       folderPath
@@ -49,10 +51,15 @@ const addClaim = async (req, res) => {
       folderPath
     );
 
-    console.log(claimData);
+    // Save claim data to DB
+    const newClaim = new Claim({
+      ...claimData,
+      userId: userId,
+    });
+    const savedClaim = await newClaim.save();
 
     // Respond with success
-    res.status(200).json({ success: true, data: { claimData, fileData } });
+    res.status(200).json({ success: true, data: savedClaim });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
