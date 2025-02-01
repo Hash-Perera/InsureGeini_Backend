@@ -21,7 +21,7 @@ router.post(
 
 router.post("/add2", claimService.addClaim2);
 
-router.get("/get", claimService.getClaims);
+router.get("/all", claimService.getClaims);
 
 router.post(
   "/upload",

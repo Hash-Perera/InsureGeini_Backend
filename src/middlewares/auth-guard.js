@@ -1,7 +1,7 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/user.model");
+import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
 
-const AuthGuard = (req, res, next) => {
+export default function AuthGuard(req, res, next) {
   const header = req.headers["authorization"];
   const token = header && header.split(" ")[1];
 
@@ -37,6 +37,4 @@ const AuthGuard = (req, res, next) => {
       next();
     }
   );
-};
-
-module.exports = { AuthGuard };
+}

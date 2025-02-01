@@ -1,7 +1,7 @@
 import awsService from "../services/aws.service.js";
 import Claim from "../models/claim.model.js";
 
-// Add Claim Service
+//! Add Claim Service
 const addClaim = async (req, res) => {
   try {
     console.log("Claim request processing...");
@@ -17,35 +17,35 @@ const addClaim = async (req, res) => {
     claimData.insuranceFront = await awsService.uploadSingleFile(
       fileData.insuranceFront[0]
     );
-    // claimData.insuranceBack = await awsService.uploadSingleFile(
-    //   fileData.insuranceBack[0],
-    //   folderPath
-    // );
-    // claimData.nicFront = await awsService.uploadSingleFile(
-    //   fileData.nicFront[0],
-    //   folderPath
-    // );
-    // claimData.nicBack = await awsService.uploadSingleFile(
-    //   fileData.nicBack[0],
-    //   folderPath
-    // );
-    // claimData.drivingLicenseFront = await awsService.uploadSingleFile(
-    //   fileData.drivingLicenseFront[0],
-    //   folderPath
-    // );
-    // claimData.drivingLicenseBack = await awsService.uploadSingleFile(
-    //   fileData.drivingLicenseBack[0],
-    //   folderPath
-    // );
-    // claimData.driverFace = await awsService.uploadSingleFile(
-    //   fileData.driverFace[0],
-    //   folderPath
-    // );
+    claimData.insuranceBack = await awsService.uploadSingleFile(
+      fileData.insuranceBack[0],
+      folderPath
+    );
+    claimData.nicFront = await awsService.uploadSingleFile(
+      fileData.nicFront[0],
+      folderPath
+    );
+    claimData.nicBack = await awsService.uploadSingleFile(
+      fileData.nicBack[0],
+      folderPath
+    );
+    claimData.drivingLicenseFront = await awsService.uploadSingleFile(
+      fileData.drivingLicenseFront[0],
+      folderPath
+    );
+    claimData.drivingLicenseBack = await awsService.uploadSingleFile(
+      fileData.drivingLicenseBack[0],
+      folderPath
+    );
+    claimData.driverFace = await awsService.uploadSingleFile(
+      fileData.driverFace[0],
+      folderPath
+    );
 
-    // claimData.damageImages = await awsService.uploadMultipleFiles(
-    //   fileData.damageImages,
-    //   folderPath
-    // );
+    claimData.damageImages = await awsService.uploadMultipleFiles(
+      fileData.damageImages,
+      folderPath
+    );
 
     console.log(claimData);
 
@@ -60,11 +60,13 @@ const addClaim = async (req, res) => {
   }
 };
 
-// Get Claims Service
+//! Get Claims Service
 const getClaims = async (req, res) => {
   try {
-    // Fetch claims from the database (mocked here for now)
-    const claims = []; // Replace with actual database query
+    const claims = [];
+    console.log("Getting claims...");
+    console.log(req.user);
+
     res.status(200).json({ success: true, data: claims });
   } catch (error) {
     console.error(error.message);
@@ -75,6 +77,7 @@ const getClaims = async (req, res) => {
   }
 };
 
+//? For testing
 const upload = async (req, res) => {
   const fileData = req.files.file1[0];
   const response = await awsService.uploadSingleFile(fileData);
@@ -82,12 +85,12 @@ const upload = async (req, res) => {
   res.status(200).json({ success: true, data: response });
 };
 
+//? For testing
 const addClaim2 = async (req, res) => {
   // create a claim object record in db
   const claim = new Claim({
     ...req.body,
   });
-
   const saved = await claim.save();
   res.status(200).json({ success: true, data: saved });
 };
