@@ -46,6 +46,16 @@ const addClaim = async (req, res) => {
       folderPath
     );
 
+    claimData.frontLicencePlate = await awsService.uploadSingleFile(
+      fileData.frontLicencePlate[0],
+      folderPath
+    );
+
+    claimData.backLicencePlate = await awsService.uploadSingleFile(
+      fileData.backLicencePlate[0],
+      folderPath
+    );
+
     claimData.damageImages = await awsService.uploadMultipleFiles(
       fileData.damageImages,
       folderPath
@@ -69,12 +79,12 @@ const addClaim = async (req, res) => {
   }
 };
 
-//! Get Claims Service
+//! Get All Claims
 const getClaims = async (req, res) => {
   try {
-    const claims = [];
     console.log("Getting claims...");
-    console.log(req.user);
+    const userId = req.user?.toString();
+    const claims = await Claim.find({ userId: userId });
 
     res.status(200).json({ success: true, data: claims });
   } catch (error) {
@@ -82,6 +92,23 @@ const getClaims = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Failed to get claims. Please try again.",
+    });
+  }
+};
+
+//! getClaimById
+const getClaimById = async (req, res) => {
+  try {
+    console.log("Getting claim by id...");
+    const claimId = req.params.id;
+    const claim = await Claim.findById(claimId);
+
+    res.status(200).json({ success: true, data: claim });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get claim. Please try again.",
     });
   }
 };
@@ -107,6 +134,7 @@ const addClaim2 = async (req, res) => {
 export default {
   addClaim,
   getClaims,
+  getClaimById,
   upload,
   addClaim2,
 };

@@ -23,7 +23,7 @@ const claimSchema = new mongoose.Schema({
 
   location: {
     type: Object,
-    required: true,
+    required: false,
   },
 
   userId: {
@@ -69,6 +69,16 @@ const claimSchema = new mongoose.Schema({
   },
 
   driverFace: {
+    type: String,
+    required: true,
+  },
+
+  frontLicencePlate: {
+    type: String,
+    required: true,
+  },
+
+  backLicencePlate: {
     type: String,
     required: true,
   },
