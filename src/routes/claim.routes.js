@@ -14,11 +14,18 @@ router.post(
     { name: "drivingLicenseFront", maxCount: 1 },
     { name: "drivingLicenseBack", maxCount: 1 },
     { name: "driverFace", maxCount: 1 },
+    { name: "damageImages", maxCount: 10 },
+    { name: "frontLicencePlate", maxCount: 1 },
+    { name: "backLicencePlate", maxCount: 1 },
   ]),
   claimService.addClaim
 );
 
-router.get("/get", claimService.getClaims);
+router.get("/all", claimService.getClaims);
+
+router.get("/:id", claimService.getClaimById);
+
+router.post("/add2", claimService.addClaim2);
 
 router.post(
   "/upload",
