@@ -15,6 +15,12 @@ const addClaim = async (req, res) => {
     const claimId = `CLM_${previousClaimCount + 1}`;
     const folderPath = `${userId}/${claimId}`;
 
+    //uploading the audio file to s3
+    claimData.audio = await awsService.uploadSingleFile(
+      fileData.audio[0],
+      folderPath
+    );
+
     // Upload files to AWS
     claimData.insuranceFront = await awsService.uploadSingleFile(
       fileData.insuranceFront[0],

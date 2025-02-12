@@ -17,6 +17,7 @@ router.post(
     { name: "damageImages", maxCount: 10 },
     { name: "frontLicencePlate", maxCount: 1 },
     { name: "backLicencePlate", maxCount: 1 },
+    { name: "audio", maxCount: 1 },
   ]),
   claimService.addClaim
 );
