@@ -25,7 +25,10 @@ const claimSchema = new mongoose.Schema({
     type: Object,
     required: false,
   },
-
+  audio: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: Types.ObjectId,
     ref: "User",

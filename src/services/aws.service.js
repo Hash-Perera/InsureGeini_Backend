@@ -10,9 +10,16 @@ const uploadSingleFile = async (file, folderPath) => {
     const fileKey = folderPath
       ? `${folderPath}/${Date.now()}-${file.originalname}`
       : `${Date.now()}-${file.originalname}`;
-    const buffer = await sharp(file.buffer)
-      .resize({ height: 1920, width: 1080, fit: "contain" })
-      .toBuffer();
+
+    let buffer;
+
+    if (file.mimetype.startsWith("image/")) {
+      buffer = await sharp(file.buffer)
+        .resize({ height: 1920, width: 1080, fit: "contain" })
+        .toBuffer();
+    } else {
+      buffer = file.buffer;
+    }
 
     const params = {
       Bucket: BUCKET_NAME,
