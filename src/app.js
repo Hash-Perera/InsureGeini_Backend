@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import BASE_URL_V1 from "./config/base-url.js";
 import authRoutes from "./routes/auth.routes.js";
 import claimRoutes from "./routes/claim.routes.js";
+import reportRoutes from "./routes/report.routes.js";
 import AuthGuard from "./middlewares/auth-guard.js";
 
 //! Initialize Express app
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 app.use(AuthGuard); // Auth Middleware
 app.use(`${BASE_URL_V1}/auth`, authRoutes);
 app.use(`${BASE_URL_V1}/claims`, claimRoutes);
+app.use(`${BASE_URL_V1}/reports`, reportRoutes);
 // app.use(`${BASE_URL_V1}/role`, roleRoutes);
 
 export default app;
