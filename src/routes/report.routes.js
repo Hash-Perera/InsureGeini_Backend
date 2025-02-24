@@ -6,6 +6,9 @@ import {
   getReportsByUserId,
   getAllReports,
   getReportStats,
+  getAverageEstimations,
+  getReportCountsByStatus,
+  getReportsCountOverTime,
 } from "../services/report.service.js";
 
 const router = express.Router();
@@ -24,5 +27,10 @@ router.get("/all", getAllReports);
 
 // Route to get report statistics
 router.get("/stats", getReportStats);
+
+// New statistical routes
+router.get("/stats/average-estimations", getAverageEstimations);
+router.get("/stats/status-counts", getReportCountsByStatus);
+router.get("/stats/reports-over-time", getReportsCountOverTime);
 
 export default router;

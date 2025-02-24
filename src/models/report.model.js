@@ -16,16 +16,17 @@ const reportSchema = new mongoose.Schema({
     required: true,
   },
   status: {
-    type: ["Pending", "Approved", "Rejected"],
+    type: String,
+    enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",
     required: true,
   },
   estimation_requested: {
-    type: String,
+    type: Number,
     required: false,
   },
   estimation_approved: {
-    type: String,
+    type: Number,
     required: false,
   },
   reason: {
