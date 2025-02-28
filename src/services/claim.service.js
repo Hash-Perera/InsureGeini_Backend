@@ -62,6 +62,11 @@ const addClaim = async (req, res) => {
       folderPath
     );
 
+    claimData.vinNumber = await awsService.uploadSingleFile(
+      fileData.vinNumber[0],
+      folderPath
+    );
+
     claimData.damageImages = await awsService.uploadMultipleFiles(
       fileData.damageImages,
       folderPath
