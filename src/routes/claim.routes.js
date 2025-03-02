@@ -17,6 +17,7 @@ router.post(
     { name: "damageImages", maxCount: 10 },
     { name: "frontLicencePlate", maxCount: 1 },
     { name: "backLicencePlate", maxCount: 1 },
+    { name: "vinNumber", maxCount: 1 },
     { name: "audio", maxCount: 1 },
   ]),
   claimService.addClaim
@@ -24,7 +25,7 @@ router.post(
 
 router.get("/all", claimService.getClaims);
 
-router.get("/:id", claimService.getClaimById);
+router.get("/detail/:id", claimService.getClaimById);
 
 router.post("/add2", claimService.addClaim2);
 
@@ -33,5 +34,9 @@ router.post(
   upload.fields([{ name: "file1", maxCount: 1 }]),
   claimService.upload
 );
+
+router.post("/queue", claimService.addToQueue);
+
+router.get("/queue-details", claimService.getQueueDetails);
 
 export default router;

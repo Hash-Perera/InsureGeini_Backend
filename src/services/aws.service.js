@@ -1,9 +1,49 @@
 import s3 from "../config/aws-config.js";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import sharp from "sharp";
 
 const BUCKET_NAME = process.env.BUCKET_NAME;
 const BUCKET_REGION = process.env.BUCKET_REGION;
+
+// const uploadSingleFile = async (file, folderPath) => {
+//   try {
+//     const fileKey = folderPath
+//       ? `${folderPath}/${Date.now()}-${file.originalname}`
+//       : `${Date.now()}-${file.originalname}`;
+
+//     let buffer;
+
+//     if (file.mimetype.startsWith("image/")) {
+//       buffer = await sharp(file.buffer)
+//         .resize({ height: 1920, width: 1080, fit: "contain" })
+//         .toBuffer();
+//     } else {
+//       buffer = file.buffer;
+//     }
+
+//     const params = {
+//       Bucket: BUCKET_NAME,
+//       Key: fileKey,
+//       Body: buffer,
+//       ContentType: file.mimetype,
+//     };
+
+//     // Upload the file
+//     const command = new PutObjectCommand(params);
+//     console.log("Uploading...");
+//     await s3.send(command);
+
+//     // Dynamically construct the public URL
+//     const fileUrl = `https://${BUCKET_NAME}.s3.${BUCKET_REGION}.amazonaws.com/${fileKey}`;
+
+//     // Return the URL
+//     return fileUrl;
+//   } catch (error) {
+//     console.error("Error uploading file to S3:", error);
+//     throw error;
+//   }
+// };
 
 const uploadSingleFile = async (file, folderPath) => {
   try {
@@ -11,35 +51,41 @@ const uploadSingleFile = async (file, folderPath) => {
       ? `${folderPath}/${Date.now()}-${file.originalname}`
       : `${Date.now()}-${file.originalname}`;
 
-    let buffer;
+    let buffer = file.buffer;
 
+    // Optimize image processing (if file is an image)
     if (file.mimetype.startsWith("image/")) {
       buffer = await sharp(file.buffer)
         .resize({ height: 1920, width: 1080, fit: "contain" })
         .toBuffer();
-    } else {
-      buffer = file.buffer;
     }
 
-    const params = {
-      Bucket: BUCKET_NAME,
-      Key: fileKey,
-      Body: buffer,
-      ContentType: file.mimetype,
-    };
+    // Use Multipart Upload for better reliability
+    const upload = new Upload({
+      client: s3,
+      params: {
+        Bucket: BUCKET_NAME,
+        Key: fileKey,
+        Body: buffer,
+        ContentType: file.mimetype,
+      },
+      partSize: 25 * 1024 * 1024, // 25MB chunks
+    });
 
-    // Upload the file
-    const command = new PutObjectCommand(params);
     console.log("Uploading...");
-    await s3.send(command);
+    await upload.done();
 
-    // Dynamically construct the public URL
+    // Construct the public URL dynamically
     const fileUrl = `https://${BUCKET_NAME}.s3.${BUCKET_REGION}.amazonaws.com/${fileKey}`;
 
-    // Return the URL
+    console.log("Upload successful:", fileUrl);
     return fileUrl;
   } catch (error) {
     console.error("Error uploading file to S3:", error);
+    if (error.name === "TimeoutError") {
+      console.log("Retrying upload due to timeout...");
+      return uploadSingleFile(file, folderPath); // Retry on timeout
+    }
     throw error;
   }
 };
