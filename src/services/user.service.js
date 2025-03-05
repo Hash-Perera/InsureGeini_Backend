@@ -18,72 +18,57 @@ const validateFields = (fields, res) => {
 };
 
 export const createUser = async (req, res) => {
-  const role = req.role;
-
-  // Ensure only "admin" can create users
-  if (role !== "admin") {
-    return res.status(403).json({
-      success: false,
-      message: "Unauthorized access.",
-    });
-  }
-
-  const requestedUserCreateRole = req.body.role;
-  const reqRole = await Role.findById(requestedUserCreateRole);
-
-  // Handle unknown role
-  if (!reqRole) {
-    return res.status(400).json({
-      success: false,
-      message: "Unknown role.",
-    });
-  }
-
-  const encryptedPassword = await argon2.hash(req.body.password);
-
-  // Create user based on role
   try {
-    let user;
-
-    if (reqRole.name === "staff") {
-      const { name, email, mobileNumber, address, role } = req.body;
-
-      // Validate staff fields
-      const validationError = validateFields(
-        [name, email, mobileNumber, address, role],
-        res
-      );
-      if (validationError) return validationError;
-
-      user = new User({
-        name,
-        email,
-        password: encryptedPassword,
-        mobileNumber,
-        address,
-        role,
+    const role = req.role;
+    // Ensure only "admin" can create users
+    if (role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized access.",
       });
     }
 
-    if (reqRole.name === "Customer") {
-      const {
-        name,
-        insuranceId,
-        email,
-        mobileNumber,
-        address,
-        role,
-        dob,
-        NIC_No,
-        NIC_image,
-        drivingLicenseNo,
-        drivingLicenseImage,
-      } = req.body;
+    const requestedUserCreateRole = req.body.role;
+    const reqRole = await Role.findById(requestedUserCreateRole);
 
-      // Validate customer fields
-      const validationError = validateFields(
-        [
+    // Handle unknown role
+    if (!reqRole) {
+      return res.status(400).json({
+        success: false,
+        message: "Unknown role.",
+      });
+    }
+
+    const encryptedPassword = await argon2.hash(req.body.password);
+
+    // Create user based on role
+    try {
+      let user;
+
+      if (reqRole.name === "staff") {
+        const { name, email, mobileNumber, address, role } = req.body;
+
+        // Validate staff fields
+        const validationError = validateFields(
+          [name, email, mobileNumber, address, role],
+          res
+        );
+        if (validationError) return validationError;
+
+        user = new User({
           name,
+          email,
+          password: encryptedPassword,
+          mobileNumber,
+          address,
+          role,
+        });
+      }
+
+      if (reqRole.name === "Customer") {
+        const {
+          name,
+          insuranceId,
           email,
           mobileNumber,
           address,
@@ -93,38 +78,57 @@ export const createUser = async (req, res) => {
           NIC_image,
           drivingLicenseNo,
           drivingLicenseImage,
-        ],
-        res
-      );
-      if (validationError) return validationError;
+        } = req.body;
 
-      user = new User({
-        name,
-        insuranceId,
-        email,
-        password: encryptedPassword,
-        mobileNumber,
-        address,
-        role,
-        dob,
-        NIC_No,
-        NIC_image,
-        drivingLicenseNo,
-        drivingLicenseImage,
+        // Validate customer fields
+        const validationError = validateFields(
+          [
+            name,
+            email,
+            mobileNumber,
+            address,
+            role,
+            dob,
+            NIC_No,
+            NIC_image,
+            drivingLicenseNo,
+            drivingLicenseImage,
+          ],
+          res
+        );
+        if (validationError) return validationError;
+
+        user = new User({
+          name,
+          insuranceId,
+          email,
+          password: encryptedPassword,
+          mobileNumber,
+          address,
+          role,
+          dob,
+          NIC_No,
+          NIC_image,
+          drivingLicenseNo,
+          drivingLicenseImage,
+        });
+      }
+
+      // Save user
+      await user.save();
+      return res.status(201).json({
+        success: true,
+        message: `${reqRole.name} created successfully.`,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || "An error occurred while creating the user.",
       });
     }
-
-    // Save user
-    await user.save();
-    return res.status(201).json({
-      success: true,
-      message: `${reqRole.name} created successfully.`,
-    });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "An error occurred while creating the user.",
-    });
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
   }
 };
 
