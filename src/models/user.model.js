@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
   },
   insuranceId: {
     type: String,
-    required: true,
+    required: false,
   },
   email: {
     type: String,
@@ -28,6 +28,27 @@ const userSchema = new mongoose.Schema({
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role", // Add a reference to the Role model if applicable
+    required: true,
+  },
+  // New fields for client registration
+  dob: {
+    type: Date,
+    required: false,
+  },
+  NIC_No: {
+    type: String,
+    required: false,
+  },
+  NIC_image: {
+    type: String, // Store the image URL or path
+    required: false,
+  },
+  drivingLicenseNo: {
+    type: String,
+    required: false,
+  },
+  drivingLicenseImage: {
+    type: String, // Store the image URL or path
     required: false,
   },
 });

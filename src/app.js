@@ -6,6 +6,7 @@ import authRoutes from "./routes/auth.routes.js";
 import claimRoutes from "./routes/claim.routes.js";
 import reportRoutes from "./routes/report.routes.js";
 import AuthGuard from "./middlewares/auth-guard.js";
+import User from "./routes/user.routes.js";
 
 //! Initialize Express app
 const app = express();
@@ -23,6 +24,8 @@ app.use(AuthGuard); // Auth Middleware
 app.use(`${BASE_URL_V1}/auth`, authRoutes);
 app.use(`${BASE_URL_V1}/claims`, claimRoutes);
 app.use(`${BASE_URL_V1}/reports`, reportRoutes);
+app.use(`${BASE_URL_V1}/user`, User);
+
 // app.use(`${BASE_URL_V1}/role`, roleRoutes);
 
 export default app;
