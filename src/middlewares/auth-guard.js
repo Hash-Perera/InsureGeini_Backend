@@ -16,9 +16,6 @@ export default function AuthGuard(req, res, next) {
   if (req.path === "/v1/user/login") {
     return next();
   }
-  if (req.path === "/v1/user") {
-    return next();
-  }
 
   //! Checking token
   if (!token) {
