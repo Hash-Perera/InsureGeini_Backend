@@ -119,8 +119,9 @@ export const createCustomer = async (req, res) => {
       address,
       role,
       dob,
-      NIC_No,
+      nicNo,
       drivingLicenseNo,
+      inusrancePolicy,
     } = req.body;
 
     const encryptedPassword = await argon2.hash(req.body.password);
@@ -134,8 +135,9 @@ export const createCustomer = async (req, res) => {
         address,
         role,
         dob,
-        NIC_No,
+        nicNo,
         drivingLicenseNo,
+        inusrancePolicy,
       ],
       res
     );
@@ -145,8 +147,8 @@ export const createCustomer = async (req, res) => {
 
     const folderPath = `${userId}`;
 
-    const NIC_image = await awsService.uploadSingleFile(
-      fileData.NIC_image[0],
+    const nicImage = await awsService.uploadSingleFile(
+      fileData.nicImage[0],
       folderPath
     );
     const drivingLicenseImage = await awsService.uploadSingleFile(
@@ -164,9 +166,10 @@ export const createCustomer = async (req, res) => {
       address,
       role,
       dob,
-      NIC_No,
+      nicNo,
       drivingLicenseNo,
-      NIC_image: NIC_image,
+      inusrancePolicy,
+      nicImage: nicImage,
       drivingLicenseImage: drivingLicenseImage,
     });
 

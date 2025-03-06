@@ -10,7 +10,7 @@ import upload from "../middlewares/upload.js";
 router.post(
   "/createCustomer",
   upload.fields([
-    { name: "NIC_image", maxCount: 1 },
+    { name: "nicImage", maxCount: 1 },
     { name: "drivingLicenseImage", maxCount: 1 },
   ]),
   createCustomer

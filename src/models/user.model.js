@@ -35,11 +35,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: false,
   },
-  NIC_No: {
+  nicNo: {
     type: String,
     required: false,
   },
-  NIC_image: {
+  nicImage: {
     type: String, // Store the image URL or path
     required: false,
   },
@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema({
   },
   drivingLicenseImage: {
     type: String, // Store the image URL or path
+    required: false,
+  },
+  inusrancePolicy: {
+    type: String,
     required: false,
   },
 });
