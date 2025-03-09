@@ -44,6 +44,11 @@ const claimSchema = new mongoose.Schema({
     default: "Pending",
   },
 
+  vinNum: {
+    type: String,
+    required: true,
+  },
+
   //Images
   insuranceFront: {
     type: String,
@@ -86,6 +91,11 @@ const claimSchema = new mongoose.Schema({
   },
 
   backLicencePlate: {
+    type: String,
+    required: true,
+  },
+
+  vinNumber: {
     type: String,
     required: true,
   },

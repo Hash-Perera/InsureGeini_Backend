@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import app from "./app.js";
+import queueService from "./services/queue.service.js";
 
 //! Environment variables
 dotenv.config();
@@ -20,3 +21,6 @@ mongoose
   .catch((err) => {
     console.error("Error connecting to MongoDB:", err.message);
   });
+
+//! Queue Service
+queueService.initializeRabbitMQ();
