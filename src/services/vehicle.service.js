@@ -110,3 +110,28 @@ export const createVehicle = async (req, res) => {
     res.status(500).json({ success: false, message: "An error occurred." });
   }
 };
+
+export const deleteVehicle = async (req, res) => {
+  try {
+    const role = req.role;
+    const { vehicleId } = req.params;
+
+    // Ensure only "admin" can delete vehicles
+    if (role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized access.",
+      });
+    }
+
+    // Find the vehicle by ID and delete it
+    await Vehicle.findByIdAndDelete(vehicleId);
+    return res.status(200).json({
+      success: true,
+      message: "Vehicle deleted successfully.",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
+  }
+};

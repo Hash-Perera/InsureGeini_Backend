@@ -4,6 +4,7 @@ import Role from "../models/role.model.js";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
 import awsService from "../services/aws.service.js";
+import Vehicle from "../models/vehicle.model.js";
 
 // Helper function to validate required fields
 const validateFields = (fields, res) => {
@@ -204,9 +205,44 @@ export const GetAllCustomers = async (req, res) => {
     }
 
     const customers = await User.find({ role: customerRole._id });
+
     return res.status(200).json({
       success: true,
       data: customers,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
+  }
+};
+
+export const getCustomerById = async (req, res) => {
+  try {
+    const role = req.role;
+    if (role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized access.",
+      });
+    }
+
+    const userId = req.params.id;
+    const customer = await User.findById(userId);
+
+    if (!customer) {
+      return res.status(404).json({
+        success: false,
+        message: "customer not found.",
+      });
+    }
+
+    //fetch vehicles of the customer
+    const vehicles = await Vehicle.find({ userId: userId });
+
+    return res.status(200).json({
+      success: true,
+      data: customer,
+      vehicles: vehicles,
     });
   } catch (error) {
     console.error(error.message);

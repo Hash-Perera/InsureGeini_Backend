@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import upload from "../middlewares/upload.js";
-import { createVehicle } from "../services/vehicle.service.js";
+import { createVehicle, deleteVehicle } from "../services/vehicle.service.js";
 
 // Create a new route for vehicle creation
 router.post(
@@ -19,4 +19,5 @@ router.post(
   createVehicle // This is the controller function that handles the vehicle creation logic
 );
 
+router.delete("/deleteVehicle/:id", deleteVehicle);
 export default router;
