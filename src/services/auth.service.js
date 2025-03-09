@@ -54,7 +54,7 @@ const login = async (req, res) => {
       { id: user._id, role: role.name },
       process.env.JWT_SECRET || "InsureGeiniJWTKey123456",
       {
-        expiresIn: "30d",
+        expiresIn: "2h",
       }
     );
 

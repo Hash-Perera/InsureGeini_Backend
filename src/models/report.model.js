@@ -11,30 +11,35 @@ const reportSchema = new mongoose.Schema({
     ref: "Claim",
     required: true,
   },
+  audioToTextConvertedContext: {
+    type: String,
+    required: true,
+  },
   status: {
-    type: ["Pending", "Approved", "Rejected"],
+    type: String,
+    enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",
     required: true,
   },
   estimation_requested: {
-    type: String,
-    required: true,
+    type: Number,
+    required: false,
   },
   estimation_approved: {
-    type: String,
-    required: true,
+    type: Number,
+    required: false,
   },
   reason: {
     type: String,
-    required: true,
+    required: false,
   },
   incidentReport: {
     type: String,
-    required: true,
+    required: false,
   },
   decisionReport: {
     type: String,
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,
