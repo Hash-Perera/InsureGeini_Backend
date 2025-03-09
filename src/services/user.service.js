@@ -185,6 +185,100 @@ export const createCustomer = async (req, res) => {
   }
 };
 
+export const GetAllCustomers = async (req, res) => {
+  try {
+    const role = req.role;
+    if (role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized access.",
+      });
+    }
+
+    const customerRole = await Role.findOne({ name: "Customer" });
+    if (!customerRole) {
+      return res.status(400).json({
+        success: false,
+        message: "Customer role not found.",
+      });
+    }
+
+    const customers = await User.find({ role: customerRole._id });
+    return res.status(200).json({
+      success: true,
+      data: customers,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    const role = req.role;
+    if (role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized access.",
+      });
+    }
+
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if (!deletedUser) {
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while deleting the user.",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully.",
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
+  }
+};
+
+export const getAllStaff = async (req, res) => {
+  try {
+    const role = req.role;
+    if (role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Unauthorized access.",
+      });
+    }
+
+    const staffRole = await Role.findOne({ name: "staff" });
+    if (!staffRole) {
+      return res.status(400).json({
+        success: false,
+        message: "Staff role not found.",
+      });
+    }
+
+    const staff = await User.find({ role: staffRole._id });
+    return res.status(200).json({
+      success: true,
+      data: staff,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
+  }
+};
+
 export const loginUser = async (req, res) => {
   try {
     const dto = req.body;
