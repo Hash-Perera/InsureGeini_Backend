@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const vehicleSchema = new mongoose.Schema({
-  user_id: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", // Reference to the User model
     required: true,
@@ -10,23 +10,19 @@ const vehicleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  insuranceCardImageFront: {
-    type: String, // Store the front insurance card image URL or path
-    required: true,
-  },
-  insuranceCardImageBack: {
-    type: String, // Store the back insurance card image URL or path
-    required: true,
+  insuranceCard: {
+    front: {
+      type: String, // Store the front insurance card image URL or path
+      required: true,
+    },
+    back: {
+      type: String, // Store the back insurance card image URL or path
+      required: true,
+    },
   },
   vehicleModel: {
     type: String,
     required: true,
-    enum: [
-      "Model 1",
-      "Model 2",
-      "Model 3",
-      "Model 4", // Replace with actual models
-    ],
   },
   vehiclePhotos: {
     front: {

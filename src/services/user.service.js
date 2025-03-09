@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
-import Vehicle from "../models/vehicle.model.js";
 import Role from "../models/role.model.js";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
@@ -177,6 +176,7 @@ export const createCustomer = async (req, res) => {
     await user.save();
     return res.status(201).json({
       success: true,
+      userId: userId,
       message: "Customer created successfully.",
     });
   } catch (error) {
