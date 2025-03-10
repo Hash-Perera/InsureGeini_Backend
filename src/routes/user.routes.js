@@ -6,6 +6,7 @@ import {
   GetAllCustomers,
   getAllStaff,
   deleteUser,
+  getCustomerById,
 } from "../services/user.service.js";
 const router = express.Router();
 import upload from "../middlewares/upload.js";
@@ -23,5 +24,6 @@ router.post("/login", loginUser);
 router.get("/getAllCustomers", GetAllCustomers);
 router.get("/getAllStaff", getAllStaff);
 router.delete("/deleteUser/:id", deleteUser);
+router.get("/getCustomerById/:id", getCustomerById);
 
 export default router;
