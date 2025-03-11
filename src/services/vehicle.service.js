@@ -15,17 +15,8 @@ export const createVehicle = async (req, res) => {
       });
     }
 
-    // Extract the data from request body
-    const {
-      userId,
-      insurancePolicyNo,
-      vehicleModel,
-      engineNo,
-      chassisNo,
-      vinNumber,
-      vehicleColor,
-      vehicleNumberPlate,
-    } = req.body;
+    const jsonData = JSON.parse(req.body.jsonData);
+    const userId = jsonData.userId;
 
     // Manually generate vehicle ID
     const vehicleId = new mongoose.Types.ObjectId();
@@ -74,27 +65,33 @@ export const createVehicle = async (req, res) => {
     // Create a new vehicle object
     const vehicle = new Vehicle({
       _id: vehicleId,
-      userId, // Reference to the User model
-      insurancePolicyNo,
+      userId: userId, // Reference to the User model
+      insurancePolicy: jsonData.insurancePolicy,
+      policyAdOns: {
+        generaProtection: jsonData.policyAdOns.generaProtection,
+        vehicleSpecific: jsonData.policyAdOns.vehicleSpecific,
+        usageSpecific: jsonData.policyAdOns.usageSpecific,
+        workRelated: jsonData.policyAdOns.workRelated,
+      },
+      vehicleModel: jsonData.vehicleModel,
+      engineNo: jsonData.engineNo,
+      chassisNo: jsonData.chassisNo,
+      vinNumber: jsonData.vinNumber,
+      vehicleColor: jsonData.vehicleColor,
+      vehicleNumberPlate: jsonData.vehicleNumberPlate,
+      numberPlateImages: {
+        front: numberPlateImageFront,
+        back: numberPlateImageBack,
+      },
       insuranceCard: {
         front: insuranceCardImageFront,
         back: insuranceCardImageBack,
       },
-      vehicleModel,
       vehiclePhotos: {
         front: vehiclePhotoFront,
         back: vehiclePhotoBack,
         left: vehiclePhotoLeft,
         right: vehiclePhotoRight,
-      },
-      engineNo,
-      chassisNo,
-      vinNumber,
-      vehicleColor,
-      vehicleNumberPlate,
-      numberPlateImages: {
-        front: numberPlateImageFront,
-        back: numberPlateImageBack,
       },
     });
 
@@ -114,7 +111,7 @@ export const createVehicle = async (req, res) => {
 export const deleteVehicle = async (req, res) => {
   try {
     const role = req.role;
-    const { vehicleId } = req.params;
+    const vehicleId = req.params.id;
 
     // Ensure only "admin" can delete vehicles
     if (role !== "admin") {
@@ -125,7 +122,15 @@ export const deleteVehicle = async (req, res) => {
     }
 
     // Find the vehicle by ID and delete it
-    await Vehicle.findByIdAndDelete(vehicleId);
+    const deletedVehicle = await Vehicle.findByIdAndDelete(vehicleId);
+
+    if (!deletedVehicle) {
+      return res.status(404).json({
+        success: false,
+        message: "Vehicle not found.",
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: "Vehicle deleted successfully.",
