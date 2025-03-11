@@ -135,3 +135,19 @@ export const deleteVehicle = async (req, res) => {
     res.status(500).json({ success: false, message: "An error occurred." });
   }
 };
+
+export const getVehiclesByUserId = async (req, res) => {
+  try {
+    const userId = req.user;
+
+    // Find all vehicles by user ID
+    const vehicles = await Vehicle.find({ userId });
+    return res.status(200).json({
+      success: true,
+      vehicles: vehicles,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, message: "An error occurred." });
+  }
+};
