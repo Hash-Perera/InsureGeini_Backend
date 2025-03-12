@@ -158,7 +158,6 @@ export const getAllReports = async (req, res) => {
 export const getReportStats = async (req, res) => {
   try {
     const { startDate, endDate, status, timeInterval: filter } = req.query;
-    console.log(req.query);
 
     // Initialize the query object
     let query = {};
