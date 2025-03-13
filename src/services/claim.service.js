@@ -94,9 +94,8 @@ const addClaim = async (req, res) => {
 //! Get All Claims
 const getClaims = async (req, res) => {
   try {
-    console.log("Getting claims...");
     const userId = req.user?.toString();
-    const claims = await Claim.find({ userId: userId });
+    const claims = await Claim.find();
 
     res.status(200).json({ success: true, data: claims });
   } catch (error) {
