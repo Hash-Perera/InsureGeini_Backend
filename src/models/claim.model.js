@@ -25,7 +25,14 @@ const claimSchema = new mongoose.Schema({
     type: Object,
     required: false,
   },
-
+  wheather: {
+    type: String,
+    required: false,
+  },
+  audio: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: Types.ObjectId,
     ref: "User",
@@ -35,6 +42,11 @@ const claimSchema = new mongoose.Schema({
   status: {
     type: String,
     default: "Pending",
+  },
+
+  vinNum: {
+    type: String,
+    required: true,
   },
 
   //Images
@@ -79,6 +91,11 @@ const claimSchema = new mongoose.Schema({
   },
 
   backLicencePlate: {
+    type: String,
+    required: true,
+  },
+
+  vinNumber: {
     type: String,
     required: true,
   },

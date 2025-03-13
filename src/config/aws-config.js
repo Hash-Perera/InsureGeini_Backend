@@ -13,6 +13,7 @@ const s3 = new S3Client({
     secretAccessKey: SECRET_ACCESS_KEY,
   },
   region: BUCKET_REGION,
+  maxAttempts: 5,
 });
 
 export default s3;

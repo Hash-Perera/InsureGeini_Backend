@@ -1,4 +1,5 @@
 import awsService from "../services/aws.service.js";
+import queueService from "../services/queue.service.js";
 import Claim from "../models/claim.model.js";
 
 //! Add Claim Service
@@ -14,6 +15,12 @@ const addClaim = async (req, res) => {
     const previousClaimCount = await Claim.countDocuments({ userId: userId });
     const claimId = `CLM_${previousClaimCount + 1}`;
     const folderPath = `${userId}/${claimId}`;
+
+    //uploading the audio file to s3
+    claimData.audio = await awsService.uploadSingleFile(
+      fileData.audio[0],
+      folderPath
+    );
 
     // Upload files to AWS
     claimData.insuranceFront = await awsService.uploadSingleFile(
@@ -53,6 +60,11 @@ const addClaim = async (req, res) => {
 
     claimData.backLicencePlate = await awsService.uploadSingleFile(
       fileData.backLicencePlate[0],
+      folderPath
+    );
+
+    claimData.vinNumber = await awsService.uploadSingleFile(
+      fileData.vinNumber[0],
       folderPath
     );
 
@@ -131,10 +143,22 @@ const addClaim2 = async (req, res) => {
   res.status(200).json({ success: true, data: saved });
 };
 
+const addToQueue = async (req, res) => {
+  queueService.sendToFraudDetectionQueue(req.body);
+  res.status(200).json({ success: true, data: req.body });
+};
+
+const getQueueDetails = async (req, res) => {
+  queueService.getQueueStats().then((stats) => {
+    res.status(200).json({ success: true, data: stats });
+  });
+};
 export default {
   addClaim,
   getClaims,
   getClaimById,
   upload,
   addClaim2,
+  addToQueue,
+  getQueueDetails,
 };
