@@ -1,6 +1,7 @@
 import awsService from "../services/aws.service.js";
 import queueService from "../services/queue.service.js";
 import Claim from "../models/claim.model.js";
+import Report from "../models/report.model.js";
 
 //! Add Claim Service
 const addClaim = async (req, res) => {
@@ -111,11 +112,15 @@ const getClaims = async (req, res) => {
 //! getClaimById
 const getClaimById = async (req, res) => {
   try {
-    console.log("Getting claim by id...");
     const claimId = req.params.id;
     const claim = await Claim.findById(claimId);
 
-    res.status(200).json({ success: true, data: claim });
+    //getting the report for the claim
+    const reports = await Report.findOne({
+      claimId: claimId,
+    });
+
+    res.status(200).json({ success: true, data: claim, report: reports });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({

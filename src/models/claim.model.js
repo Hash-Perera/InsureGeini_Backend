@@ -38,23 +38,24 @@ const claimSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-
+  vehicleId: {
+    type: Types.ObjectId,
+    ref: "Vehicle",
+    required: true,
+  },
   status: {
     type: String,
     default: "Pending",
   },
-
   vinNum: {
     type: String,
     required: true,
   },
-
   //Images
   insuranceFront: {
     type: String,
     required: true,
   },
-
   insuranceBack: {
     type: String,
     required: true,

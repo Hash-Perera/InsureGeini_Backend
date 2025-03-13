@@ -6,10 +6,29 @@ const vehicleSchema = new mongoose.Schema({
     ref: "User", // Reference to the User model
     required: true,
   },
-  insurancePolicyNo: {
+  insurancePolicy: {
     type: String,
     required: true,
   },
+  policyAdOns: {
+    generaProtection: {
+      type: [String],
+      required: true,
+    },
+    vehicleSpecific: {
+      type: [String],
+      required: true,
+    },
+    usageSpecific: {
+      type: [String],
+      required: true,
+    },
+    workRelated: {
+      type: [String],
+      required: true,
+    },
+  },
+
   insuranceCard: {
     front: {
       type: String, // Store the front insurance card image URL or path

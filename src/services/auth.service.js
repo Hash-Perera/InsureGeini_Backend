@@ -54,12 +54,20 @@ const login = async (req, res) => {
       { id: user._id, role: role.name },
       process.env.JWT_SECRET || "InsureGeiniJWTKey123456",
       {
-        expiresIn: "2h",
+        expiresIn: "7d",
       }
     );
 
+    const userData = {
+      insuranceId: user.insuranceId,
+      name: user.name,
+      email: user.email,
+      mobileNumber: user.mobileNumber,
+      address: user.address,
+    };
+
     //? Send token and permissions
-    res.status(200).json({ token: payload, role: role.name });
+    res.status(200).json({ token: payload, role: role.name, user: userData });
   } catch (error) {
     console.error(error.message);
     res
