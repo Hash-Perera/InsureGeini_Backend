@@ -2,6 +2,8 @@ import awsService from "../services/aws.service.js";
 import queueService from "../services/queue.service.js";
 import Claim from "../models/claim.model.js";
 import Report from "../models/report.model.js";
+import Vehicle from "../models/vehicle.model.js";
+import Fraud from "../models/fraud.model.js";
 
 //! Add Claim Service
 const addClaim = async (req, res) => {
@@ -157,6 +159,36 @@ const getQueueDetails = async (req, res) => {
     res.status(200).json({ success: true, data: stats });
   });
 };
+
+const fraudCompare = async (req, res) => {
+  try {
+    const claimId = req.params.id;
+    const claim = await Claim.findById(claimId);
+    if (!claim) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Claim not found" });
+    }
+
+    const vehicle = await Vehicle.findById(claim.vehicleId);
+    if (!vehicle) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Vehicle not found" });
+    }
+
+    const fraud = await Fraud.findOne().sort({ _id: -1 });
+
+    console.log(vehicle);
+    console.log(fraud);
+
+    res.status(200).json({ success: true, data: { vehicle, fraud } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 export default {
   addClaim,
   getClaims,
@@ -165,4 +197,5 @@ export default {
   addClaim2,
   addToQueue,
   getQueueDetails,
+  fraudCompare,
 };
