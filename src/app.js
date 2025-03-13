@@ -7,7 +7,6 @@ import claimRoutes from "./routes/claim.routes.js";
 import reportRoutes from "./routes/report.routes.js";
 import AuthGuard from "./middlewares/auth-guard.js";
 import feedbackRoutes from "./routes/feedback.routes.js";
-import reportRoutes from "./routes/report.routes.js";
 import User from "./routes/user.routes.js";
 import Vehicle from "./routes/vehicle.routes.js";
 
