@@ -2,11 +2,15 @@ import awsService from "../services/aws.service.js";
 import queueService from "../services/queue.service.js";
 import Claim from "../models/claim.model.js";
 import Report from "../models/report.model.js";
+import Vehicle from "../models/vehicle.model.js";
+import Fraud from "../models/fraud.model.js";
+import Obd from "../models/obd.model.js";
 
 //! Add Claim Service
 const addClaim = async (req, res) => {
   try {
     console.log("Claim request processing...");
+
     // Get data from request
     const claimData = req.body.dto ? JSON.parse(req.body.dto) : {};
     const fileData = req.files;
@@ -78,6 +82,7 @@ const addClaim = async (req, res) => {
     const newClaim = new Claim({
       ...claimData,
       userId: userId,
+      imageLocation: randomLocation[Math.floor(Math.random() * 7)],
     });
     const savedClaim = await newClaim.save();
 
@@ -157,6 +162,66 @@ const getQueueDetails = async (req, res) => {
     res.status(200).json({ success: true, data: stats });
   });
 };
+
+const fraudCompare = async (req, res) => {
+  try {
+    const claimId = req.params.id;
+    const claim = await Claim.findById(claimId);
+    if (!claim) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Claim not found" });
+    }
+
+    const vehicle = await Vehicle.findById(claim.vehicleId);
+    if (!vehicle) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Vehicle not found" });
+    }
+
+    const fraud = await Fraud.findOne().sort({ _id: -1 });
+
+    const obdData = await Obd.findOne({ vehicleId: claim.vehicleId });
+
+    res.status(200).json({ success: true, data: { vehicle, fraud, obdData } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const randomLocation = [
+  {
+    latitude: 6.739596629877806,
+    longitude: 80.09440485606127,
+  },
+  {
+    latitude: 6.719461556662279,
+    longitude: 79.90748355907672,
+  },
+  {
+    latitude: 6.752893088105629,
+    longitude: 80.01771684834235,
+  },
+  {
+    latitude: 6.78839124153081,
+    longitude: 79.98140053856469,
+  },
+  {
+    latitude: 6.729190431284059,
+    longitude: 79.90508434773373,
+  },
+  {
+    latitude: 6.8932403520918974,
+    longitude: 79.92735838876452,
+  },
+  {
+    latitude: 6.902340034287175,
+    longitude: 79.91883398471882,
+  },
+];
+
 export default {
   addClaim,
   getClaims,
@@ -165,4 +230,5 @@ export default {
   addClaim2,
   addToQueue,
   getQueueDetails,
+  fraudCompare,
 };

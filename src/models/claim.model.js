@@ -25,6 +25,10 @@ const claimSchema = new mongoose.Schema({
     type: Object,
     required: false,
   },
+  imageLocation: {
+    type: Object,
+    required: false,
+  },
   wheather: {
     type: String,
     required: false,

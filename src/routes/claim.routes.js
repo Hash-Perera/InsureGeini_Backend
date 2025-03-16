@@ -19,6 +19,7 @@ router.post(
     { name: "backLicencePlate", maxCount: 1 },
     { name: "vinNumber", maxCount: 1 },
     { name: "audio", maxCount: 1 },
+    { name: "vehicleFront", maxCount: 1 },
   ]),
   claimService.addClaim
 );
@@ -38,5 +39,7 @@ router.post(
 router.post("/queue", claimService.addToQueue);
 
 router.get("/queue-details", claimService.getQueueDetails);
+
+router.get("/claimFraud/:id", claimService.fraudCompare);
 
 export default router;
