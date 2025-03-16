@@ -1,7 +1,8 @@
 import awsService from "./aws.service.js";
 import Vehicle from "../models/vehicle.model.js";
 import mongoose from "mongoose";
-
+import Obd from "../models/obd.model.js";
+import { obdCodes } from "../config/constants.js";
 export const createVehicle = async (req, res) => {
   try {
     const role = req.role;
@@ -20,6 +21,19 @@ export const createVehicle = async (req, res) => {
 
     // Manually generate vehicle ID
     const vehicleId = new mongoose.Types.ObjectId();
+
+    // // Create OBD data for the vehicle
+    // const shuffledObdCodes = [...obdCodes].sort(() => 0.5 - Math.random());
+    // const selectedObdCodes = shuffledObdCodes
+    //   .slice(0, 4)
+    //   .map((obd) => obd.code);
+    // const obdCodesString = selectedObdCodes.join(",");
+    // const obdData = new Obd({
+    //   vehicleId: vehicleId,
+    //   obdCodes: obdCodesString, // Example: "P0016,P0017,P0101,P2000"
+    // });
+
+    // await obdData.save();
 
     // Create folder path based on vehicle ID
     const folderPath = `${userId}/${vehicleId}`;
@@ -97,6 +111,20 @@ export const createVehicle = async (req, res) => {
 
     // Save the vehicle object
     await vehicle.save();
+
+    // Create OBD data for the vehicle
+    const shuffledObdCodes = [...obdCodes].sort(() => 0.5 - Math.random());
+    const selectedObdCodes = shuffledObdCodes
+      .slice(0, 4)
+      .map((obd) => obd.code);
+    const obdCodesString = selectedObdCodes.join(",");
+    const obdData = new Obd({
+      vehicleId: vehicleId,
+      obdCodes: obdCodesString,
+    });
+
+    await obdData.save();
+
     return res.status(201).json({
       success: true,
       vehicleId: vehicleId,
