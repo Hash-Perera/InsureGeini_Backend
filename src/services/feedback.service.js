@@ -68,7 +68,7 @@ const getFeedbacks = async (req, res) => {
 const getFeedbackById = async (req, res) => {
   try {
     const feedbackId = req.params.id;
-    const feedback = await Feedback.findById(feedbackId).populate("userId");
+    const feedback = await Feedback.findById(feedbackId).populate("userId").populate("reportId");
     console.log(feedback);
     res.status(200).json({ success: true, data: feedback });
   } catch (error) {
@@ -148,7 +148,7 @@ const deleteFeedbackById = async (req, res) => {
 const getFeedbackByReportId = async (req, res) => {
   try {
     const reportId = req.params.id;
-    const feedback = await Feedback.find({ reportId: reportId });
+    const feedback = await Feedback.findOne({ reportId: reportId });
     res.status(200).json({ success: true, data: feedback });
   } catch (error) {
     console.error(error.message);
@@ -157,6 +157,7 @@ const getFeedbackByReportId = async (req, res) => {
       message: "Failed to get feedback. Please try again.",
     });
   }
+  
 };
 
 //get feedback by user id
