@@ -5,6 +5,8 @@ import Report from "../models/report.model.js";
 import Vehicle from "../models/vehicle.model.js";
 import Fraud from "../models/fraud.model.js";
 import Obd from "../models/obd.model.js";
+import { getWhether } from "../utils/getWhether.js";
+import { getLocationAddress } from "../utils/getLocationAddress.js";
 
 //! Add Claim Service
 const addClaim = async (req, res) => {
@@ -20,6 +22,27 @@ const addClaim = async (req, res) => {
     const previousClaimCount = await Claim.countDocuments({ userId: userId });
     const claimId = `CLM_${previousClaimCount + 1}`;
     const folderPath = `${userId}/${claimId}`;
+
+    // Get whether data
+    const _weatherData = await getWhether(
+      claimData.location.latitude,
+      claimData.location.longitude
+    );
+
+    const _weather = _weatherData?.data?.weather?.[0];
+    const _weatherFull = _weather?.main + ", " + _weather?.description;
+
+    const weather = _weatherFull;
+
+    claimData.weather = weather;
+
+    // Get location address
+    const locationAddress = await getLocationAddress(
+      claimData.location.latitude,
+      claimData.location.longitude
+    );
+
+    claimData.locationAddress = locationAddress?.data?.plus_code?.compound_code;
 
     //uploading the audio file to s3
     claimData.audio = await awsService.uploadSingleFile(
