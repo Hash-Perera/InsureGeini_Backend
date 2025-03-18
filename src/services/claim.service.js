@@ -109,6 +109,13 @@ const addClaim = async (req, res) => {
     });
     const savedClaim = await newClaim.save();
 
+    const reqBody = {
+      claimId: savedClaim._id,
+    };
+
+    //Send to Damage detection queue
+    queueService.sendToDamageDetectionQueue(reqBody);
+
     // Respond with success
     res.status(200).json({ success: true, data: savedClaim });
   } catch (error) {
@@ -257,6 +264,11 @@ const fraudApprove = async (req, res) => {
   }
 };
 
+const sendToDamageDetectionQueue = async (req, res) => {
+  queueService.sendToDamageDetectionQueue(req.body);
+  res.status(200).json({ success: true, data: req.body });
+};
+
 const randomLocation = [
   {
     latitude: 6.739596629877806,
@@ -298,4 +310,5 @@ export default {
   getQueueDetails,
   fraudCompare,
   fraudApprove,
+  sendToDamageDetectionQueue,
 };
