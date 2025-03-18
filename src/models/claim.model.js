@@ -29,7 +29,11 @@ const claimSchema = new mongoose.Schema({
     type: Object,
     required: false,
   },
-  wheather: {
+  weather: {
+    type: String,
+    required: false,
+  },
+  locationAddress: {
     type: String,
     required: false,
   },
