@@ -214,6 +214,11 @@ const fraudCompare = async (req, res) => {
   }
 };
 
+const fraudApprove = async (req, res) => {
+  const claimId = req.params.id;
+  // const claim = await Claim.findById
+};
+
 const randomLocation = [
   {
     latitude: 6.739596629877806,
@@ -254,4 +259,5 @@ export default {
   addToQueue,
   getQueueDetails,
   fraudCompare,
+  fraudApprove,
 };
