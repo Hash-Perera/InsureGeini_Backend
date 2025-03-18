@@ -14,6 +14,7 @@ const QUEUES = {
 const QUEUE_NAMES = [QUEUES.DAMAGE, QUEUES.FRAUD, QUEUES.POLICY];
 
 async function initializeRabbitMQ() {
+  console.log("🐇 Initializing RabbitMQ...");
   try {
     const connection = await amqp.connect(RABBITMQ_URI);
     channel = await connection.createChannel();

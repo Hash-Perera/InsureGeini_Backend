@@ -118,6 +118,11 @@ const claimSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+
+  obdCodes: {
+    type: String,
+    required: false,
+  },
 });
 
 const Claim = mongoose.model("Claim", claimSchema);
