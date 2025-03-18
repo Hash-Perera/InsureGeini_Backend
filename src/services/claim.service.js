@@ -215,8 +215,46 @@ const fraudCompare = async (req, res) => {
 };
 
 const fraudApprove = async (req, res) => {
-  const claimId = req.params.id;
-  // const claim = await Claim.findById
+  console.log("Fraud Approve", req.body.claimId);
+  console.log("Fraud Approve", req.body.status); // Approve // Reject
+
+  if (req.body.status === "Approve") {
+    const fraud_verification = {
+      model_verified: true,
+      face_verified: true,
+      license_verified: true,
+      insurance_verified: true,
+      number_plates_verified: true,
+      prev_damage_verified: true,
+      vin_number_verified: true,
+      color_verified: true,
+      location_verified: true,
+      fraud_verified: true,
+    };
+    const response = await Claim.findByIdAndUpdate(req.body.claimId, {
+      fraud_verification,
+    });
+
+    res.status(200).json({ success: true, data: response });
+  } else {
+    const fraud_verification = {
+      model_verified: false,
+      face_verified: false,
+      license_verified: false,
+      insurance_verified: false,
+      number_plates_verified: false,
+      prev_damage_verified: false,
+      vin_number_verified: false,
+      color_verified: false,
+      location_verified: false,
+      fraud_verified: false,
+    };
+    const response = await Claim.findByIdAndUpdate(req.body.claimId, {
+      fraud_verification,
+    });
+
+    res.status(200).json({ success: true, data: response });
+  }
 };
 
 const randomLocation = [

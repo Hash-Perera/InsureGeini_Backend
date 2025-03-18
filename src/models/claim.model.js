@@ -123,6 +123,12 @@ const claimSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+
+  // type should any type of object
+  fraud_verification: {
+    type: Object,
+    required: false,
+  },
 });
 
 const Claim = mongoose.model("Claim", claimSchema);

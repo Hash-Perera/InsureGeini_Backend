@@ -42,6 +42,6 @@ router.get("/queue-details", claimService.getQueueDetails);
 
 router.get("/claimFraud/:id", claimService.fraudCompare);
 
-router.post("/fraudApprove/:id", claimService.fraudApprove);
+router.post("/fraudApprove", claimService.fraudApprove);
 
 export default router;
