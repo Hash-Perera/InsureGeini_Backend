@@ -9,6 +9,7 @@ import {
   getAverageEstimations,
   getReportCountsByStatus,
   getReportsCountOverTime,
+  getReportsByClaimId,
 } from "../services/report.service.js";
 
 const router = express.Router();
@@ -24,6 +25,9 @@ router.get("/user", getReportsByUserId);
 
 // Route to get all reports (admin access)
 router.get("/all", getAllReports);
+
+// Route to get reports by claimId
+router.get("/all/:claimId", getReportsByClaimId);
 
 // Route to get report statistics
 router.get("/stats", getReportStats);
