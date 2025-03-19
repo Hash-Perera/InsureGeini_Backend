@@ -9,6 +9,7 @@ import AuthGuard from "./middlewares/auth-guard.js";
 import feedbackRoutes from "./routes/feedback.routes.js";
 import User from "./routes/user.routes.js";
 import Vehicle from "./routes/vehicle.routes.js";
+import Detection from "./routes/detection.routes.js";
 
 //! Initialize Express app
 const app = express();
@@ -29,6 +30,7 @@ app.use(`${BASE_URL_V1}/feedback`, feedbackRoutes);
 app.use(`${BASE_URL_V1}/reports`, reportRoutes);
 app.use(`${BASE_URL_V1}/user`, User);
 app.use(`${BASE_URL_V1}/vehicle`, Vehicle);
+app.use(`${BASE_URL_V1}/detection`, Detection);
 
 // app.use(`${BASE_URL_V1}/role`, roleRoutes);
 
