@@ -70,6 +70,12 @@ export const updateReportByClaimId = async (req, res) => {
   }
 };
 
+export const getReportsByClaimId = async (req, res) => {
+  const { claimId } = req.params;
+  const reports = await Report.find({ claimId });
+  res.status(200).json({ success: true, data: reports });
+};
+
 export const getReportsByUserId = async (req, res) => {
   try {
     //const userId = req.user?._id;
