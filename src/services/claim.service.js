@@ -101,6 +101,13 @@ const addClaim = async (req, res) => {
       folderPath
     );
 
+    if (fileData.vehicleFront[0]) {
+      claimData.vehicleFront = await awsService.uploadSingleFile(
+        fileData.vehicleFront[0],
+        folderPath
+      );
+    }
+
     // Save claim data to DB
     const newClaim = new Claim({
       ...claimData,

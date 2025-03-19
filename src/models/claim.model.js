@@ -60,6 +60,10 @@ const claimSchema = new mongoose.Schema({
     required: true,
   },
   //Images
+  vehicleFront: {
+    type: String,
+    required: true,
+  },
   insuranceFront: {
     type: String,
     required: true,
