@@ -46,4 +46,6 @@ router.post("/fraudApprove", claimService.fraudApprove);
 
 router.post("/sendToDamage", claimService.sendToDamageDetectionQueue);
 
+router.post("/sendToPolicy", claimService.sendToPolicyQueue);
+
 export default router;

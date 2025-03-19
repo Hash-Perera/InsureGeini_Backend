@@ -52,6 +52,14 @@ async function sendToFraudDetectionQueue(data) {
   );
 }
 
+async function sendToPolicyQueue(data) {
+  channel.publish(
+    EXCHANGE_NAME,
+    "policy.key",
+    Buffer.from(JSON.stringify(data))
+  );
+}
+
 async function getQueueStats() {
   const stats = {};
 
@@ -87,4 +95,5 @@ export default {
   sendToDamageDetectionQueue,
   sendToFraudDetectionQueue,
   getQueueStats,
+  sendToPolicyQueue,
 };

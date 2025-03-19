@@ -269,6 +269,11 @@ const sendToDamageDetectionQueue = async (req, res) => {
   res.status(200).json({ success: true, data: req.body });
 };
 
+const sendToPolicyQueue = async (req, res) => {
+  queueService.sendToPolicyQueue(req.body);
+  res.status(200).json({ success: true, data: req.body });
+};
+
 const randomLocation = [
   {
     latitude: 6.739596629877806,
@@ -311,4 +316,5 @@ export default {
   fraudCompare,
   fraudApprove,
   sendToDamageDetectionQueue,
+  sendToPolicyQueue,
 };
