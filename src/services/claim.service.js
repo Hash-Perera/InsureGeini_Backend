@@ -113,6 +113,18 @@ const addClaim = async (req, res) => {
       ...claimData,
       userId: userId,
       imageLocation: randomLocation[Math.floor(Math.random() * 7)],
+      fraud_verification: {
+        model_verified: true,
+        face_verified: true,
+        license_verified: true,
+        insurance_verified: true,
+        number_plates_verified: true,
+        prev_damage_verified: true,
+        vin_number_verified: true,
+        color_verified: true,
+        location_verified: true,
+        fraud_verified: true,
+      },
     });
     const savedClaim = await newClaim.save();
 
