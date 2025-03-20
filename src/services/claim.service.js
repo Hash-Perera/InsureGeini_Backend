@@ -7,6 +7,7 @@ import Fraud from "../models/fraud.model.js";
 import Obd from "../models/obd.model.js";
 import { getWhether } from "../utils/getWhether.js";
 import { getLocationAddress } from "../utils/getLocationAddress.js";
+import mongoose from "mongoose";
 
 //! Add Claim Service
 const addClaim = async (req, res) => {
@@ -229,7 +230,8 @@ const fraudCompare = async (req, res) => {
         .json({ success: false, message: "Vehicle not found" });
     }
 
-    const fraud = await Fraud.findOne().sort({ _id: -1 });
+    const fraudClaimId = new mongoose.Types.ObjectId(claimId);
+    const fraud = await Fraud.findOne({ claim: fraudClaimId });
 
     const obdData = await Obd.findOne({ vehicleId: claim.vehicleId });
 
