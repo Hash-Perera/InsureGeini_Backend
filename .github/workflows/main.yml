@@ -1,0 +1,36 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up AWS credentials
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Change to your AWS region
+
+      # Step 3: Install SSH client and deploy
+      - name: Deploy to EC2
+        run: |
+          # Install SSH client
+          sudo apt-get install -y ssh
+
+          # SSH into EC2 and deploy the application
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/my-key.pem ec2-user@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
+            cd /home/ec2-user/my-app || exit 1
+            git pull origin main || exit 1
+            npm install || exit 1
+            pm2 restart my-app || exit 1
+          EOF
