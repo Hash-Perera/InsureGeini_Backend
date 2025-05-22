@@ -1,4 +1,5 @@
-name: Deploy to EC2
+# .github/workflows/deploy.yml
+name: Deploy insuregeni-backend to EC2
 
 on:
   push:
@@ -8,29 +9,44 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      # Step 1: Check out the code
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # Step 2: Set up AWS credentials
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Change to your AWS region
-
-      # Step 3: Install SSH client and deploy
-      - name: Deploy to EC2
+      - name: Write SSH key to file
         run: |
-          # Install SSH client
-          sudo apt-get install -y ssh
+          echo "${{ secrets.EC2_KEY }}" > ./chathura_ec2.pem
+          chmod 600 ./chathura_ec2.pem
 
-          # SSH into EC2 and deploy the application
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/my-key.pem ec2-user@${{ secrets.EC2_IP_ADDRESS }} << 'EOF'
-            cd /home/ec2-user/my-app || exit 1
-            git pull origin main || exit 1
-            npm install || exit 1
-            pm2 restart my-app || exit 1
-          EOF
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          port: 22
+          key_path: ./chathura_ec2.pem
+          script: |
+            # Install Node.js, npm, git, and PM2
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get update
+            sudo apt-get install -y nodejs npm git
+            sudo npm install -g pm2
+
+            # update your repo
+              cd insuregeni-backend
+              git pull origin main
+              cd ..
+            fi
+
+            # Build and deploy
+            cd insuregeni-backend
+            npm install
+            npm run build
+
+            # Start or restart with PM2
+            pm2 start dist/main.js --name insuregeni-backend || pm2 restart insuregeni-backend
+            pm2 save
+
+      - name: Clean up SSH key
+        run: rm ./chathura_ec2.pem
