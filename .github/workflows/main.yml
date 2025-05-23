@@ -1,5 +1,5 @@
 # .github/workflows/deploy.yml
-name: Deploy insuregeni-backend to EC2
+name: Deploy insuregeini-backend to EC2
 
 on:
   push:
@@ -28,18 +28,18 @@ jobs:
           key_path: ./chathura_ec2.pem
           script: |
             # update your repo
-              cd insuregeni-backend
+              cd insuregeini-backend
               git pull origin main
               cd ..
             
 
             # Build and deploy
-            cd insuregeni-backend
+            cd insuregeini-backend
             npm install
             npm run build
 
             # Start or restart with PM2
-            pm2 start dist/main.js --name insuregeni-backend || pm2 restart insuregeni-backend
+            pm2 start dist/main.js --name insuregeini-backend || pm2 restart insuregeini-backend
             pm2 save
 
       - name: Clean up SSH key
