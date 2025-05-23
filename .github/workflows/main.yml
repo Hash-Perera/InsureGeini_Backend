@@ -28,13 +28,13 @@ jobs:
           key_path: ./chathura_ec2.pem
           script: |
             # update your repo
-              cd insuregeini-backend
+              cd InsureGeini_Backend
               git pull origin main
               cd ..
             
 
             # Build and deploy
-            cd insuregeini-backend
+            cd InsureGeini_Backend
             npm install
             npm run build
 
