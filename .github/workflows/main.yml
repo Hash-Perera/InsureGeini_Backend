@@ -31,7 +31,7 @@ jobs:
               cd insuregeni-backend
               git pull origin main
               cd ..
-            fi
+            
 
             # Build and deploy
             cd insuregeni-backend
