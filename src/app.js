@@ -19,7 +19,7 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing
 app.use(bodyParser.json()); // Parse incoming request bodies in JSON format
 
 app.get("/", (req, res) => {
-  res.send("Health Check");
+  res.send("Health Check insureGeini API");
 });
 
 //! Routes
