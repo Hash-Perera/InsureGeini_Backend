@@ -32,11 +32,9 @@ jobs:
               git pull origin main
               cd ..
             
+            # No build step needed
+              echo "No build step needed for Express backend"
 
-            # Build and deploy
-            cd InsureGeini_Backend
-            npm install
-            npm run build
 
             # Start or restart with PM2
             pm2 start dist/main.js --name insuregeini-backend || pm2 restart insuregeini-backend
