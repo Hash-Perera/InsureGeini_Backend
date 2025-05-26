@@ -16,9 +16,10 @@ const uploadSingleFile = async (file, folderPath) => {
 
     // Optimize image processing (if file is an image)
     if (file.mimetype.startsWith("image/")) {
-      buffer = await sharp(file.buffer)
+      /* buffer = await sharp(file.buffer)
         .resize({ height: 1920, width: 1080, fit: "contain" })
-        .toBuffer();
+        .toBuffer(); */
+      buffer = file.buffer;
     }
 
     // Use Multipart Upload for better reliability
